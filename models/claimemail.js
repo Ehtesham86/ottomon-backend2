@@ -8,6 +8,7 @@ const claimemailSchema=new mongoose.Schema({
     subject:String,
     type:String,
     to:String,
+    message:String,
    
     text:String
 })

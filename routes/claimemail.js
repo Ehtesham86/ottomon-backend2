@@ -21,6 +21,8 @@ router.post(
         subject: req.body.subject,
         type: req.body.type,
         to: req.body.to,
+        message: req.body.message,
+
         text: req.body.text,
       });
   
@@ -93,6 +95,7 @@ Claimemail.findOneAndUpdate({
     type:req.body.type,
     to:req.body.to,
     text:req.body.text,
+    message: req.body.message,
     
   
     }).then(result=>{
