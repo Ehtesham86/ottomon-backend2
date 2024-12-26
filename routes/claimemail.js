@@ -10,39 +10,71 @@ cloudinary.config({
   api_secret: 'FCqYSd-J1Kew_VgMCOBZSIcqnJY'
 
 });
-router.post(
-    "/",
-    (req, res, next) => {
-      const claimemail = new Claimemail({
-        _id: new mongoose.Types.ObjectId(), // Correct mongoose ObjectId usage
-        from: req.body.from,
-        mailgunResponseId: req.body.mailgunResponseId,
-        sentAt: req.body.sentAt,
-        subject: req.body.subject,
-        type: req.body.type,
-        to: req.body.to,
-        messages: req.body.messages,
-        body: req.body.body,
+// router.post(
+//     "/",
+//     (req, res, next) => {
+//       const claimemail = new Claimemail({
+//         _id: new mongoose.Types.ObjectId(), // Correct mongoose ObjectId usage
+//         from: req.body.from,
+//         mailgunResponseId: req.body.mailgunResponseId,
+//         sentAt: req.body.sentAt,
+//         subject: req.body.subject,
+//         type: req.body.type,
+//         to: req.body.to,
+//         messages: req.body.messages,
+//         body: req.body.body,
 
-        text: req.body.text,
-      });
+//         text: req.body.text,
+//       });
   
-      claimemail
-        .save()
-        .then((result) => {
-          console.log(result);
-          res.status(200).json({
-            newClaimemail: result,
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(500).json({
-            error: err,
-          });
-        });
-    }
-  );
+//       claimemail
+//         .save()
+//         .then((result) => {
+//           console.log(result);
+//           res.status(200).json({
+//             newClaimemail: result,
+//           });
+//         })
+//         .catch((err) => {
+//           console.log(err);
+//           res.status(500).json({
+//             error: err,
+//           });
+//         });
+//     }
+//   );
+  router.post("/", (req, res, next) => {
+  const { from, mailgunResponseId, sentAt, subject, type, to, messages, body, text } = req.body;
+
+  // if (!from || !mailgunResponseId || !sentAt || !subject || !type || !to || !messages || !body || !text) {
+  //   return res.status(400).json({ message: "All fields are required" });
+  // }
+
+  const claimemail = new Claimemail({
+    _id: new mongoose.Types.ObjectId(),
+    from,
+    mailgunResponseId,
+    sentAt,
+    subject,
+    type,
+    to,
+    messages,
+    body,
+    text,
+  });
+
+  claimemail
+    .save()
+    .then((result) => {
+      res.status(201).json({
+        newClaimemail: result,
+      });
+    })
+    .catch((err) => {
+      console.error("Error saving claimemail:", err);
+      res.status(500).json({ error: "Failed to save Claimemail" });
+    });
+});
 router.get("/", (req, res, next) => {
     Claimemail.find()
     .then((result) => {
@@ -71,7 +103,7 @@ res.status(200).json({
     })
   })
 });
-router.delete('/:id',(req,res,next)=>{
+router.delete('/:id',(req,res,next)=>{  
     Claimemail.remove({_id:req.params.id})
 .then(result=>{
     res.status(200).json({
