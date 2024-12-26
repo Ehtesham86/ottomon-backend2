@@ -12,6 +12,7 @@ var authRouter = require("./routes/auth.js");
 var checkoutRoute = require("./routes/checkout.js");
 var registerRouter = require("./routes/Register.js");
 var usersRouter = require("./routes/users.js");
+var ClaimemailRoute = require("./routes/claimemail.js");
 
 const productRoute=require('./routes/product.js');
 const matterssesRoute=require('./routes/mattresses.js');
@@ -61,6 +62,8 @@ app.use('/beds',bedsRoute)
 app.use('/accessories',accessoriesRoute)
 app.use('/sales',salesRoute)
 app.use('/service',serviceRoute)
+app.use('/Claimemail',ClaimemailRoute)
+
 app.use('/checkout',checkoutRoute)
 app.use('/serviceForm',serviceFormRoute)
 app.use("/api/user", userRouter);
