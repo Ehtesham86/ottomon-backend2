@@ -22,6 +22,7 @@ router.post(
         type: req.body.type,
         to: req.body.to,
         message: req.body.message,
+        body: req.body.body,
 
         text: req.body.text,
       });
@@ -97,7 +98,8 @@ Claimemail.findOneAndUpdate({
     text:req.body.text,
     message: req.body.message,
     
-  
+    body: req.body.body,
+
     }).then(result=>{
         res.status(200).json({
             updated_claimemail:result
