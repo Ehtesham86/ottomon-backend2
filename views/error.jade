@@ -1,0 +1,8 @@
+doctype html
+html
+  head
+    title Error
+  body
+    h1= message
+    h2 Status Code: #{error.status || 500}
+    pre= error.stack
