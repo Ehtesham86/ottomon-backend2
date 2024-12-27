@@ -68,19 +68,28 @@ res.status(200).json({
     })
   })
 });
-router.delete('/:id',(req,res,next)=>{
-    Claimemail.remove({_id:req.params.id})
-.then(result=>{
-    res.status(200).json({
-        message:"Claimemail deleted",
-        result:result
-    })
-}).catch(err=>{
-    res.status(500).json({
-        error:err
-    })
-})
-})
+router.delete('/:id', (req, res, next) => {
+    Claimemail.deleteOne({ _id: req.params.id }) // Use deleteOne instead of remove
+        .then(result => {
+            if (result.deletedCount > 0) {
+                res.status(200).json({
+                    message: "Claimemail deleted",
+                    result: result,
+                });
+            } else {
+                res.status(404).json({
+                    message: "Claimemail not found",
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err,
+            });
+        });
+});
+
+
 router.put('/:id',(req,res,next)=>{
 console.log(req.params.id);
 Claimemail.findOneAndUpdate({
