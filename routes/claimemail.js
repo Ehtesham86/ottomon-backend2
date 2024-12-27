@@ -89,32 +89,42 @@ router.delete('/:id', (req, res, next) => {
         });
 });
 
-
-router.put('/:id',(req,res,next)=>{
-console.log(req.params.id);
-Claimemail.findOneAndUpdate({
-    _id:req.params.id
-},{
-    from:req.body.from,
-    mailgunResponseId:req.body.mailgunResponseId,
-    sentAt:req.body.sentAt,
-    subject:req.body.subject,
-    type:req.body.type,
-    to:req.body.to,
-    text:req.body.text,
-    messages: req.body.messages,
-    
-    body: req.body.body,
-
-    }).then(result=>{
-        res.status(200).json({
-            updated_claimemail:result
-        })
-    }).catch(err=>{
-        console.log(err);
+router.put('/:id', (req, res, next) => {
+    console.log(req.params.id);
+  
+    // Use the query parameter if it exists; otherwise, fall back to the request body
+    const updatedFields = {
+      from: req.body.from,
+      mailgunResponseId: req.body.mailgunResponseId,
+      sentAt: req.body.sentAt,
+      subject: req.query.subject || req.body.subject, // Use query parameter if provided
+      type: req.body.type,
+      to: req.body.to,
+      text: req.body.text,
+      messages: req.body.messages,
+      body: req.body.body,
+    };
+  
+    Claimemail.findOneAndUpdate(
+      { _id: req.params.id },
+      updatedFields,
+      { new: true } // Return the updated document
+    )
+      .then((result) => {
+        if (result) {
+          res.status(200).json({
+            updated_claimemail: result,
+          });
+        } else {
+          res.status(404).json({ message: 'Email not found' });
+        }
+      })
+      .catch((err) => {
+        console.log('Error updating email:', err);
         res.status(500).json({
-            error:err
-        })
-    })
-})
+          error: err,
+        });
+      });
+  });
+  
 module.exports = router;
